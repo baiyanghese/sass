@@ -97,6 +97,7 @@ module Sass
       def dup
         d = super
         d.send(:instance_variable_set, "@map", @map.dup)
+        d.send(:instance_variable_set, "@key_strings", @key_strings.dup)
         d
       end
 
@@ -107,6 +108,11 @@ module Sass
       def update(map)
         map = map.as_stored if map.is_a?(NormalizedMap)
         map.each {|k, v| self[k] = v}
+        self
+      end
+
+      def merge(map)
+        dup.update(map)
       end
 
       def method_missing(method, *args, &block)
